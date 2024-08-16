@@ -140,12 +140,18 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
 
 // implementation fg.deobf("blank:flib-1.20.1:${flib_version}")
-    implementation fg.deobf("curse.maven:flib-661261:${flib_file}")
 
     // Specify the version of Minecraft to use.
     // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
@@ -172,7 +178,7 @@ dependencies {
 */
 
     implementation fg.deobf("maven.modrinth:destroy:0.0.8")
-    implementation fg.deobf("maven.modrinth:cold-sweat:2.2.5.1")
+    implementation fg.deobf("curse.maven:cold-sweat-506194:5633751-sources-5633755")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
@@ -190,7 +196,7 @@ dependencies {
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
-            mc_version: mc_version, flib_version: flib_version,
+            mc_version: mc_version, destroy_version: destroy_version, cold_sweat_version: cold_sweat_version,
             loader_version_range: loader_version_range,
             neo_version_range: neo_version_range, neo_version: neo_version, 
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,

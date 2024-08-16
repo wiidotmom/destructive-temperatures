@@ -1,10 +1,12 @@
 package dev.igalaxy.destructivetemperatures;
 
-import com.momosoftworks.coldsweat.api.event.common.GatherDefaultTempModifiersEvent;
+import com.momosoftworks.coldsweat.api.event.core.GatherDefaultTempModifiersEvent;
 import com.momosoftworks.coldsweat.api.event.core.TempModifierRegisterEvent;
 import com.momosoftworks.coldsweat.api.temperature.modifier.UndergroundTempModifier;
+import com.momosoftworks.coldsweat.api.util.Placement;
 import com.momosoftworks.coldsweat.api.util.Temperature;
 import dev.igalaxy.destructivetemperatures.tempmodifiers.PollutionTempModifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,16 +32,16 @@ public class DestructiveTemperatures {
   public static void onModifiersRegister(TempModifierRegisterEvent event)
   {
     LOGGER.info("Registered pollution temp modifier");
-    event.register(() -> new PollutionTempModifier());
+    event.register(new ResourceLocation(MODID, "pollution"), () -> new PollutionTempModifier());
   }
 
   @SubscribeEvent
   public static void defaultModifiersInit(GatherDefaultTempModifiersEvent event)
   {
-    if (event.getEntity() instanceof Player && event.getType() == Temperature.Type.WORLD)
+    if (event.getEntity() instanceof Player && event.getTrait() == Temperature.Trait.WORLD)
     {
       LOGGER.info("Initialized pollution temp modifier for " + ((Player) event.getEntity()).getName().getString());
-      event.addModifier(new PollutionTempModifier().tickRate(60), false, Temperature.Addition.of(Temperature.Addition.Mode.BEFORE, Temperature.Addition.Order.FIRST, (mod2) -> mod2 instanceof UndergroundTempModifier));
+      event.addModifier(new PollutionTempModifier().tickRate(60), Placement.Duplicates.BY_CLASS, Placement.of(Placement.Mode.BEFORE, Placement.Order.FIRST, (mod2) -> mod2 instanceof UndergroundTempModifier));
     }
   }
 }
